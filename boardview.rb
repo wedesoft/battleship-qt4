@@ -11,10 +11,10 @@ class BoardView < Qt::Widget
     super parent
     @player = player
     @visible = visible
-    @panel = Qt::SvgRenderer.new PANEL
-    @hit = Qt::SvgRenderer.new HIT
-    @miss = Qt::SvgRenderer.new MISS
-    @ship = SHIPS.collect { |filename| Qt::SvgRenderer.new filename }
+    @panel = Qt::SvgRenderer.new PANEL, self
+    @hit = Qt::SvgRenderer.new HIT, self
+    @miss = Qt::SvgRenderer.new MISS, self
+    @ship = SHIPS.collect { |filename| Qt::SvgRenderer.new filename, self }
     @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
   end
   def board=(value)

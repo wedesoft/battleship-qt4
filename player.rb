@@ -6,7 +6,6 @@ class Player
     @game = game
     @ship = [[0, 0, false], [0, 1, false], [0, 2, false], [0, 3, false], [0, 4, false]]
     @board = (0 ... N).collect { (0 ... N).collect { false } }
-    @placing = false
   end
   def placing?
     @game.placing?

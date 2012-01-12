@@ -2,9 +2,9 @@
 
 Game::Game(void)
 {
-  m_human = new Player;
-  m_computer = new Player;
-  placing = true;
+  m_human = new Player(this);
+  m_computer = new Player(this);
+  m_placing = true;
 }
 
 Game::~Game(void)
@@ -17,3 +17,7 @@ void Game::computerMove(void)
 {
 }
 
+bool Game::over(void)
+{
+  return false;
+}

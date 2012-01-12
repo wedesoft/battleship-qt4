@@ -1,3 +1,4 @@
+.deps
 dsci-exercise.txt
 battleship
 *.un~
@@ -6,4 +7,6 @@ battleship
 ui_*.rb
 ui_*.hh
 qrc_*.rb
+moc_*.cc
+qrc_*.cc
 
