@@ -1,6 +1,7 @@
 .deps
 dsci-exercise.txt
 battleship
+battleship.tar.bz2
 *.un~
 *.swp
 *.o
