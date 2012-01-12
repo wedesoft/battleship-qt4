@@ -40,7 +40,6 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionNewGame"/>
-    <addaction name="actionFinishPlacement"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -53,14 +52,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionFinishPlacement">
-   <property name="text">
-    <string>Finish P&amp;lacement</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+L</string>
    </property>
   </action>
   <action name="actionQuit">

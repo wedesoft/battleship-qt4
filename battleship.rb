@@ -147,7 +147,6 @@ end
 class GameWindow < Qt::MainWindow
   DELAY = 3000
   slots 'restart()'
-  slots 'placement_done()'
   slots 'status(QString)'
   def initialize
     super
@@ -157,18 +156,12 @@ class GameWindow < Qt::MainWindow
     @content = Content.new @game, self
     setCentralWidget @content
     connect @ui.actionNewGame, SIGNAL('activated()'), self, SLOT('restart()')
-    connect @ui.actionFinishPlacement, SIGNAL('activated()'), self, SLOT('placement_done()')
     connect @ui.actionQuit, SIGNAL('activated()'), self, SLOT('close()')
     connect @content.human_board, SIGNAL('message(QString)'), self, SLOT('status(QString)')
   end
   def restart
     @game = Game.new
     @content.game = @game
-    @ui.actionFinishPlacement.enabled = true
-  end
-  def placement_done
-    @content.game.placing = false
-    @ui.actionFinishPlacement.enabled = false
   end
   def status(text)
     statusBar.showMessage text, DELAY
