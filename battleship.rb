@@ -15,6 +15,9 @@ class Player
   def ship(i)
     @ship[i]
   end
+  def place(i, x, y, vertical)
+    @ship[i] = [x, y, vertical]
+  end
   def ship_at(bx, by)
     @ship.zip(LENGTH).index do |ship, length|
       x, y, vertical = *ship
@@ -55,12 +58,21 @@ class BoardView < Qt::Widget
     end
   end
   def mouseMoveEvent(e)
-    @dx, @dy = e.x - @x0, e.y - @y0
-    update
+    if @placing
+      @dx, @dy = e.x - @x0, e.y - @y0
+      update
+    end
   end
   def mouseReleaseEvent(e)
-    @placing, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
-    update
+    if @placing
+      w, h = width / Player::N, height / Player::N
+      x, y, vertical = *@player.ship(@placing)
+      x += (@dx + w / 2) / w
+      y += (@dy + h / 2) / h
+      @player.place @placing, x, y, vertical
+      @placing, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
+      update
+    end
   end
   def paintEvent(e)
     w, h = width / Player::N, height / Player::N
