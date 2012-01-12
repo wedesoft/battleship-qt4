@@ -10,6 +10,7 @@ public:
     virtual ~Game(void);
     Player *human(void) { return m_human; }
     Player *computer(void) { return m_computer; }
+    void computerMove(void);
 protected:
     Player *m_human;
     Player *m_computer;

@@ -12,3 +12,8 @@ Game::~Game(void)
   delete m_human;
   delete m_computer;
 }
+
+void Game::computerMove(void)
+{
+}
+

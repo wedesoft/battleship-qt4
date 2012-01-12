@@ -5,6 +5,7 @@ class Player
 {
 public:
   Player(void);
+  bool defeated(void);
 };
 
 #endif

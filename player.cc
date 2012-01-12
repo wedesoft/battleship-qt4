@@ -4,3 +4,6 @@ Player::Player(void)
 {
 }
 
+bool Player::defeated(void)
+{
+}

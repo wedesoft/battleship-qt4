@@ -13,9 +13,11 @@ public:
     Content(Game *game, QWidget *parent = 0);
     BoardView *humanBoard(void) { return m_humanBoard; }
     BoardView *computerBoard(void) { return m_computerBoard; }
-    void setGame(Game *game) { m_game = game; }
+    void setGame(Game *game);
 signals:
     void message(QString);
+public slots:
+    void computerMove();
 protected:
     Ui::Content ui;
     Game *m_game;
