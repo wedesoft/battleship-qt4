@@ -23,6 +23,7 @@ class Player
 {
 public:
   Player(Game *game);
+  int hits(void);
   bool defeated(void);
   bool placing(void);
   bool gameOver(void);

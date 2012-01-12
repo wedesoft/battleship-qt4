@@ -53,5 +53,5 @@ void Game::computerMove(void)
 
 bool Game::over(void)
 {
-  return false;
+  return m_human->defeated() || m_computer->defeated();
 }

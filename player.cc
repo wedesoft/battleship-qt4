@@ -20,7 +20,7 @@ bool Player::placing(void)
 
 bool Player::gameOver(void)
 {
-  return false;
+  return m_game->over();
 }
 
 void Player::target(int x, int y)
@@ -29,9 +29,22 @@ void Player::target(int x, int y)
   m_board[y][x] = true;
 }
 
+int Player::hits(void)
+{
+  int retVal = 0;
+  for (int y=0; y<N; y++)
+    for (int x=0; x<N; x++)
+      if (board(x, y) == HIT)
+        retVal += 1;
+  return retVal;
+}
+
 bool Player::defeated(void)
 {
-  return false;
+  int n = 0;
+  for (int i=0; i<COUNT; i++)
+    n += LENGTH[i];
+  return hits() == n;
 }
 
 int Player::board(int x, int y)
