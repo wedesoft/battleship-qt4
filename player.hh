@@ -3,6 +3,8 @@
 
 class Game;
 
+#define N 10
+
 class Player
 {
 public:
