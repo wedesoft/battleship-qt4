@@ -7,18 +7,19 @@ RUBY = ruby
 RBUIC = rbuic4
 RBRCC = rbrcc
 UIC = uic-qt4
-
+MOC = moc-qt4
 
 RUBYUI = ui_gamewindow.rb ui_content.rb qrc_battleship.rb
 CCUI = ui_gamewindow.hh ui_content.hh
-OBJECTS = battleship.o gamewindow.o
+OBJECTS = battleship.o gamewindow.o game.o boardview.o content.o player.o
+MOC_OBJECTS = moc_gamewindow.o moc_boardview.o moc_content.o
 
 default: battleship
 
 all: default ruby
 
-battleship: $(CCUI) $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) $(LDADD)
+battleship: $(CCUI) $(OBJECTS) $(MOC_OBJECTS)
+	$(CXX) -o $@ $(OBJECTS) $(MOC_OBJECTS) $(LDADD)
 
 ruby: $(RUBYUI)
 
@@ -36,6 +37,9 @@ ui_%.rb: %.ui
 
 ui_%.hh: %.ui
 	$(UIC) $< > $@
+
+moc_%.cc: %.hh
+	$(MOC) $< > $@
 
 qrc_%.rb: %.qrc
 	$(RBRCC) $< > $@
