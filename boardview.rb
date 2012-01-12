@@ -87,13 +87,13 @@ class BoardView < Qt::Widget
           dx, dy = @dx, @dy
         end
         unless vertical
-          painter.setTransform Qt::Transform.new
           ship.render painter,
                       Qt::RectF.new(x * w + dx, y * h + dy, w * Player::LENGTH[i], h)
         else
           painter.setTransform Qt::Transform.new 0, 1, 1, 0, 0, 0
           ship.render painter,
                       Qt::RectF.new(y * h + dy, x * w + dx, h * Player::LENGTH[i], w)
+          painter.resetTransform
         end
       end
     end

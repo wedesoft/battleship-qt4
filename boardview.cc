@@ -55,13 +55,12 @@ void BoardView::paintEvent(QPaintEvent *e)
         dy = m_dy;
       };
       if (!vertical) {
-        QTransform transform;
-        painter->setTransform(transform);
         ship->render(painter, QRectF(x * w + dx, y * h + dy, w * LENGTH[i], h));
       } else {
         QTransform transform(0, 1, 1, 0, 0, 0);
         painter->setTransform(transform);
         ship->render(painter, QRectF(y * h + dy, x * w + dx, h * LENGTH[i], w));
+        painter->resetTransform();
       };
     };
   };

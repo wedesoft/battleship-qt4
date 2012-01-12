@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "game.hh"
 #include "player.hh"
 
@@ -10,6 +11,18 @@ Player::Player(Game *game): m_game(game)
     m_ship[i].x = 0;
     m_ship[i].y = i;
     m_ship[i].vertical = false;
+  };
+  randomize();
+}
+
+void Player::randomize(void)
+{
+  for (int c=0; c<RANDOMIZE; c++) {
+    int i = rand() % COUNT;
+    bool vertical = rand() % 2 == 1;
+    int x = rand() % (11 - (vertical ? 1 : LENGTH[i]));
+    int y = rand() % (11 - (vertical ? LENGTH[i] : 1));
+    place(i, x, y, vertical);
   };
 }
 

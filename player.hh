@@ -8,6 +8,7 @@ class Game;
 #define UNKNOWN 0
 #define HIT 1
 #define MISS 2
+#define RANDOMIZE 100
 
 static const int LENGTH[5] = {5, 4, 3, 3, 2};
 static const char *TITLE[5] = {"Carrier", "Battleship", "Destroyer",
@@ -35,6 +36,7 @@ public:
   bool valid(void);
   int shipAt(int x, int y);
 protected:
+  void randomize(void);
   Game *m_game;
   bool m_board[N][N];
   Ship m_ship[COUNT];

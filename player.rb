@@ -2,10 +2,21 @@ class Player
   N = 10
   LENGTH = [5, 4, 3, 3, 2]
   TITLE = ['Carrier', 'Battleship', 'Destroyer', 'Submarine', 'Patrol boat']
+  RANDOMIZE = 100
   def initialize(game)
     @game = game
     @ship = [[0, 0, false], [0, 1, false], [0, 2, false], [0, 3, false], [0, 4, false]]
+    randomize
     @board = (0 ... N).collect { (0 ... N).collect { false } }
+  end
+  def randomize
+    RANDOMIZE.times do
+      i = rand @ship.size
+      vertical = [false, true][rand(2)]
+      x = rand(11 - (vertical ? 1 : LENGTH[i]))
+      y = rand(11 - (vertical ? LENGTH[i] : 1))
+      place i, x, y, vertical
+    end
   end
   def placing?
     @game.placing?

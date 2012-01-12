@@ -25,7 +25,7 @@ SOURCES = battleship.cc boardview.cc content.cc game.cc gamewindow.cc player.cc 
 	content.ui gamewindow.ui battleship.qrc \
 	battleship.svg carrier.svg destroyer.svg hit.svg miss.svg panel.svg patrol\ boat.svg \
 	submarine.svg \
-	Makefile
+	Makefile Makefile.mingw
 
 default: cpp
 
