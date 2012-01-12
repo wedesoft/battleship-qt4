@@ -59,7 +59,28 @@ bool Player::place(int i, int x, int y, bool vertical)
 
 bool Player::valid(void)
 {
-  return true;
+  bool retVal = true;
+  for (int i1=0; i1<COUNT; i1++) {
+    int x1 = m_ship[i1].x;
+    int y1 = m_ship[i1].y;
+    bool vertical1 = m_ship[i1].vertical;
+    int w1 = vertical1 ? 1 : LENGTH[i1];
+    int h1 = vertical1 ? LENGTH[i1] : 1;
+    if (x1 < 0 || y1 < 0 || x1 + w1 > N || y1 + h1 > N)
+      retVal = false;
+    for (int i2=0; i2<COUNT; i2++) {
+      if (i1 != i2) {
+        int x2 = m_ship[i2].x;
+        int y2 = m_ship[i2].y;
+        bool vertical2 = m_ship[i2].vertical;
+        int w2 = vertical2 ? 1 : LENGTH[i2];
+        int h2 = vertical2 ? LENGTH[i2] : 1;
+        if (x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2)
+          retVal = false;
+      };
+    };
+  };
+  return retVal;
 }
 
 int Player::shipAt(int bx, int by)

@@ -129,8 +129,14 @@ void BoardView::mouseReleaseEvent(QMouseEvent *e)
     int x = m_player->ship(m_moving).x;
     int y = m_player->ship(m_moving).y;
     bool vertical = m_player->ship(m_moving).vertical;
-    x += (m_dx + w / 2) / w;
-    y += (m_dy + h / 2) / h;
+    if (m_dx >= 0)
+      x += (m_dx + w / 2) / w;
+    else
+      x += (m_dx - w / 2) / w;
+    if (m_dy >= 0)
+      y += (m_dy + h / 2) / h;
+    else
+      y += (m_dy - h / 2) / h;
     if (m_player->place(m_moving, x, y, vertical)) {
       emit message("Ship placed");
     } else {
