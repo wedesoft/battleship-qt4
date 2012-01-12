@@ -21,6 +21,7 @@ class Player
       x1, y1, vertical1 = *ship1
       w1 = vertical1 ? 1 : LENGTH[i1]
       h1 = vertical1 ? LENGTH[i1] : 1
+      retval = false unless x1 >= 0 and y1 >= 0 and x1 + w1 <= N and y1 + h1 <= N
       @ship.each_with_index do |ship2, i2|
         if i1 != i2
           x2, y2, vertical2 = *ship2

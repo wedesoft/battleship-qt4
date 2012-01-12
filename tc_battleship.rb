@@ -17,4 +17,15 @@ class TC_Battleship < Test::Unit::TestCase
     assert player.place(0, 4, 0, true)
     assert !player.place(0, 0, 0, true)
   end
+  def test_boundaries
+    player = create_player
+    assert !player.place(0, -1, 0, false)
+    assert player.place(0, 0, 0, false)
+    assert player.place(0, 5, 0, false)
+    assert !player.place(0, 6, 0, false)
+    assert !player.place(0, 9, -1, true)
+    assert player.place(0, 9, 0, true)
+    assert player.place(0, 9, 5, true)
+    assert !player.place(0, 9, 6, true)
+  end
 end

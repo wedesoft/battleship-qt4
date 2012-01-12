@@ -20,7 +20,6 @@ class BoardView < Qt::Widget
     @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
   end
   def mousePressEvent(e)
-  p @player.valid?
     w, h = width / Player::N, height / Player::N
     bx, by = e.x / w, e.y / h
     ship = @player.ship_at(bx, by)
@@ -31,8 +30,11 @@ class BoardView < Qt::Widget
       else
         x, y, vertical = *@player.ship(ship)
         dx, dy = bx - x, by - y
-        emit message("#{Player::TITLE[ship]} rotated")
-        @player.place ship, x + dx - dy, y + dy - dx, !vertical
+        if @player.place ship, x + dx - dy, y + dy - dx, !vertical
+          emit message("#{Player::TITLE[ship]} rotated")
+        else
+          emit message('Invalid placement')
+        end
         update
       end
     end
