@@ -44,6 +44,12 @@ class Player
       :unknown
     end
   end
+  def neighbour_hit(x, y)
+    (x > 0 and board(x - 1, y) == :hit) or
+      (x < N - 1 and board(x + 1, y) == :hit) or
+      (y > 0 and board(x, y - 1) == :hit) or
+      (y < N - 1 and board(x, y + 1) == :hit)
+  end
   def place(i, x, y, vertical)
     previous = @ship[i]
     @ship[i] = [x, y, vertical]
@@ -97,13 +103,20 @@ class Game
     @placing
   end
   def computer_move
-    move = false
-    while not move
-      x, y = rand(Player::N), rand(Player::N)
-      if @human.board(x, y) == :unknown
-        @human.target x, y
-        move = true
+    unknown = []
+    prefer = []
+    for y in 0 ... Player::N
+      for x in 0 ... Player::N
+        if @human.board(x, y) == :unknown
+          unknown.push [x, y]
+          prefer.push [x, y] if @human.neighbour_hit(x, y)
+        end
       end
+    end
+    unless prefer.empty?
+      @human.target *prefer[rand(prefer.size)]
+    else
+      @human.target *unknown[rand(unknown.size)]
     end
   end
   def over?
