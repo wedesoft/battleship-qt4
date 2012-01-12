@@ -96,7 +96,7 @@ void BoardView::mousePressEvent(QMouseEvent *e)
         int dx = bx - x;
         int dy = by - y;
         if (m_player->place(ship, x + dx - dy, y + dy - dx, !vertical)) {
-          emit message("Ship rotated");
+          emit message(QString("%1 rotated").arg(TITLE[ship]));
         } else {
           emit message("Invalid placement");
         };
@@ -138,7 +138,7 @@ void BoardView::mouseReleaseEvent(QMouseEvent *e)
     else
       y += (m_dy - h / 2) / h;
     if (m_player->place(m_moving, x, y, vertical)) {
-      emit message("Ship placed");
+      emit message(QString("%1 placed").arg(TITLE[m_moving]));
     } else {
       emit message("Invalid placement");
     };
