@@ -18,8 +18,20 @@ bool Player::placing(void)
   return m_game->placing();
 }
 
+bool Player::gameOver(void)
+{
+  return false;
+}
+
+void Player::target(int x, int y)
+{
+  m_game->setPlacing(false);
+  m_board[y][x] = true;
+}
+
 bool Player::defeated(void)
 {
+  return false;
 }
 
 int Player::board(int x, int y)

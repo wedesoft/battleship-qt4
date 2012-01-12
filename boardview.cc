@@ -73,6 +73,7 @@ void BoardView::paintEvent(QPaintEvent *e)
       else if (state == MISS)
         m_miss->render(painter, QRectF(i * w, j * h, w, h));
     };
+  delete painter;
 }
 
 void BoardView::mousePressEvent(QMouseEvent *e)
@@ -88,34 +89,27 @@ void BoardView::mousePressEvent(QMouseEvent *e)
         m_moving = ship;
         m_x0 = e->x();
         m_y0 = e->y();
+      } else {
+        int x = m_player->ship(ship).x;
+        int y = m_player->ship(ship).y;
+        bool vertical = m_player->ship(ship).vertical;
+        int dx = bx - x;
+        int dy = by - y;
+        if (m_player->place(ship, x + dx - dy, y + dy - dx, !vertical)) {
+          emit message("Ship rotated");
+        } else {
+          emit message("Invalid placement");
+        };
+        update();
       };
     };
+  } else {
+    if (!m_visible && m_player->board(bx, by) == UNKNOWN && !m_player->gameOver()) {
+      m_player->target(bx, by);
+      update();
+      emit computerMove();
+    };
   };
-  /*
-      ship = @player.ship_at(bx, by)
-      if ship
-        if e.button == Qt::LeftButton
-          @moving = ship
-          @x0, @y0 = e.x, e.y
-        else
-          x, y, vertical = *@player.ship(ship)
-          dx, dy = bx - x, by - y
-          if @player.place ship, x + dx - dy, y + dy - dx, !vertical
-            emit message("#{Player::TITLE[ship]} rotated")
-          else
-            emit message('Invalid placement')
-          end
-          update
-        end
-      end
-    else
-      if not @visible and @player.board(bx, by) == :unknown and not @player.game_over?
-        @player.target bx, by
-        update
-        emit computer_move
-      end
-    end
-    */
 }
 
 void BoardView::mouseMoveEvent(QMouseEvent *e)

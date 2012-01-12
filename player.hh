@@ -25,7 +25,9 @@ public:
   Player(Game *game);
   bool defeated(void);
   bool placing(void);
+  bool gameOver(void);
   Ship ship(int i) { return m_ship[i]; }
+  void target(int x, int y);
   int board(int x, int y);
   bool place(int i, int x, int y, bool vertical);
   bool valid(void);
