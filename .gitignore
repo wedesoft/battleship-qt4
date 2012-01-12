@@ -1,4 +1,5 @@
 dsci-exercise.txt
 *.un~
 *.swp
+ui_*.rb
 
