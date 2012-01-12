@@ -27,28 +27,16 @@ void Game::computerMove(void)
     for (int x=0; x<N; x++)
       if (m_human->board(x, y) == UNKNOWN) {
         unknown.push_back(pair< int, int >(x, y));
+        if (m_human->neighbour_hit(x, y))
+          prefer.push_back(pair< int, int >(x, y));
       };
-  int idx = random() % unknown.size();
-  m_human->target(unknown[idx].first, unknown[idx].second);
-/*
-  def computer_move
-    unknown = []
-    prefer = []
-    for y in 0 ... Player::N
-      for x in 0 ... Player::N
-        if @human.board(x, y) == :unknown
-          unknown.push [x, y]
-          prefer.push [x, y] if @human.neighbour_hit(x, y)
-        end
-      end
-    end
-    unless prefer.empty?
-      @human.target *prefer[rand(prefer.size)]
-    else
-      @human.target *unknown[rand(unknown.size)]
-    end
-  end
-  */
+  if (prefer.empty()) {
+    int idx = random() % unknown.size();
+    m_human->target(unknown[idx].first, unknown[idx].second);
+  } else {
+    int idx = random() % prefer.size();
+    m_human->target(prefer[idx].first, prefer[idx].second);
+  };
 }
 
 bool Game::over(void)

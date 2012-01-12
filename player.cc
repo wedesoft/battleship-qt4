@@ -56,7 +56,15 @@ int Player::board(int x, int y)
       return MISS;
   else
     return UNKNOWN;
-};
+}
+
+bool Player::neighbour_hit(int x, int y)
+{
+  return ((x > 0) && (board(x - 1, y) == HIT)) ||
+    ((x < N - 1) && (board(x + 1, y) == HIT)) ||
+    ((y > 0) && (board(x, y - 1) == HIT)) ||
+    ((y < N - 1) && (board(x, y + 1) == HIT));
+}
 
 bool Player::place(int i, int x, int y, bool vertical)
 {
