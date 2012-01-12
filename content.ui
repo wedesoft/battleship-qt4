@@ -66,6 +66,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="battleship.qrc"/>
+ </resources>
  <connections/>
 </ui>

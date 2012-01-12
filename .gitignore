@@ -2,4 +2,5 @@ dsci-exercise.txt
 *.un~
 *.swp
 ui_*.rb
+qrc_*.rb
 

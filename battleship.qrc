@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="images">
+    <file>carrier.svg</file>
+    <file>destroyer.svg</file>
+    <file>hit.svg</file>
+    <file>miss.svg</file>
+    <file>panel.svg</file>
+    <file>patrol boat.svg</file>
+    <file>submarine.svg</file>
+    <file>battleship.svg</file>
+  </qresource>
+</RCC>

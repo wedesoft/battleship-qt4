@@ -1,11 +1,12 @@
+require 'qrc_battleship'
 class BoardView < Qt::Widget
   signals 'message(QString)'
   signals 'computer_move()'
-  PANEL = 'panel.svg'
-  HIT = 'hit.svg'
-  MISS = 'miss.svg'
-  SHIPS = ['carrier.svg', 'battleship.svg', 'destroyer.svg',
-           'submarine.svg', 'patrol boat.svg']
+  PANEL = ':/images/panel.svg'
+  HIT = ':/images/hit.svg'
+  MISS = ':/images/miss.svg'
+  SHIPS = [':/images/carrier.svg', ':/images/battleship.svg', ':/images/destroyer.svg',
+           ':/images/submarine.svg', ':/images/patrol boat.svg']
   def initialize(player, visible, parent = nil)
     super parent
     @player = player
