@@ -27,7 +27,9 @@ public:
   bool placing(void);
   Ship ship(int i) { return m_ship[i]; }
   int board(int x, int y);
-  bool shipAt(int x, int y);
+  bool place(int i, int x, int y, bool vertical);
+  bool valid(void);
+  int shipAt(int x, int y);
 protected:
   Game *m_game;
   bool m_board[N][N];

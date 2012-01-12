@@ -7,7 +7,7 @@ Content::Content(Game *game, QWidget *parent): QWidget(parent), m_game(game)
   m_humanBoard = new BoardView(m_game->human(), true);
   layoutHuman->addWidget(m_humanBoard);
   QHBoxLayout *layoutComputer = new QHBoxLayout(ui.computerFrame);
-  m_computerBoard = new BoardView(m_game->computer(), true);
+  m_computerBoard = new BoardView(m_game->computer(), false);
   layoutComputer->addWidget(m_computerBoard);
   connect(m_computerBoard, SIGNAL(computerMove()), this, SLOT(computerMove()));
 }

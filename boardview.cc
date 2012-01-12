@@ -1,4 +1,5 @@
 #include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 #include "boardview.hh"
 
 using namespace std;
@@ -72,5 +73,81 @@ void BoardView::paintEvent(QPaintEvent *e)
       else if (state == MISS)
         m_miss->render(painter, QRectF(i * w, j * h, w, h));
     };
+}
+
+void BoardView::mousePressEvent(QMouseEvent *e)
+{
+  int w = width() / N;
+  int h = height() / N;
+  int bx = e->x() / w;
+  int by = e->y() / h;
+  if (m_visible && m_player->placing()) {
+    int ship = m_player->shipAt(bx, by);
+    if (ship != -1) {
+      if (e->button() == Qt::LeftButton) {
+        m_moving = ship;
+        m_x0 = e->x();
+        m_y0 = e->y();
+      };
+    };
+  };
+  /*
+      ship = @player.ship_at(bx, by)
+      if ship
+        if e.button == Qt::LeftButton
+          @moving = ship
+          @x0, @y0 = e.x, e.y
+        else
+          x, y, vertical = *@player.ship(ship)
+          dx, dy = bx - x, by - y
+          if @player.place ship, x + dx - dy, y + dy - dx, !vertical
+            emit message("#{Player::TITLE[ship]} rotated")
+          else
+            emit message('Invalid placement')
+          end
+          update
+        end
+      end
+    else
+      if not @visible and @player.board(bx, by) == :unknown and not @player.game_over?
+        @player.target bx, by
+        update
+        emit computer_move
+      end
+    end
+    */
+}
+
+void BoardView::mouseMoveEvent(QMouseEvent *e)
+{
+  if (m_moving != -1) {
+    m_dx = e->x() - m_x0;
+    m_dy = e->y() - m_y0;
+    update();
+  };
+}
+
+void BoardView::mouseReleaseEvent(QMouseEvent *e)
+{
+  if (m_moving != -1) {
+    int w = width() / N;
+    int h = height() / N;
+    int x = m_player->ship(m_moving).x;
+    int y = m_player->ship(m_moving).y;
+    bool vertical = m_player->ship(m_moving).vertical;
+    x += (m_dx + w / 2) / w;
+    y += (m_dy + h / 2) / h;
+    if (m_player->place(m_moving, x, y, vertical)) {
+      emit message("Ship placed");
+    } else {
+      emit message("Invalid placement");
+    };
+    m_moving = -1;
+    m_x0 = 0;
+    m_y0 = 0;
+    m_dx = 0;
+    m_dy = 0;
+    update();
+  };
 }
 

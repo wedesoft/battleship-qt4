@@ -17,6 +17,9 @@ signals:
   void computerMove(void);
 protected:
   virtual void paintEvent(QPaintEvent *e);
+  virtual void mousePressEvent(QMouseEvent *e);
+  virtual void mouseMoveEvent(QMouseEvent *e);
+  virtual void mouseReleaseEvent(QMouseEvent *e);
   Player *m_player;
   bool m_visible;
   QSvgRenderer *m_panel;

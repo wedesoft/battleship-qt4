@@ -25,7 +25,7 @@ bool Player::defeated(void)
 int Player::board(int x, int y)
 {
   if (m_board[y][x])
-    if (shipAt(x, y))
+    if (shipAt(x, y) != -1)
       return HIT;
     else
       return MISS;
@@ -33,8 +33,39 @@ int Player::board(int x, int y)
     return UNKNOWN;
 };
 
-bool Player::shipAt(int x, int y)
+bool Player::place(int i, int x, int y, bool vertical)
 {
-  return false;
+  Ship previous = m_ship[i];
+  m_ship[i].x = x;
+  m_ship[i].y = y;
+  m_ship[i].vertical = vertical;
+  bool ok = valid();
+  if (!ok)
+    m_ship[i] = previous;
+  return ok;
+}
+
+bool Player::valid(void)
+{
+  return true;
+}
+
+int Player::shipAt(int bx, int by)
+{
+  int retVal = -1;
+  for (int i=0; i<COUNT; i++) {
+    int x = m_ship[i].x;
+    int y = m_ship[i].y;
+    bool vertical = m_ship[i].vertical;
+    int length = LENGTH[i];
+    if (!vertical) {
+      if (bx >= x && bx < x + length && by == y)
+        retVal = i;
+    } else {
+      if (bx == x && by >= y && by < y + length)
+        retVal = i;
+    };
+  };
+  return retVal;
 }
 
