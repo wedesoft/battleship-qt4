@@ -8,7 +8,10 @@ require 'ui_gamewindow'
 require 'ui_content'
 class BoardView < Qt::Widget
   signals 'message(QString)'
+  signals 'computer_move()'
   PANEL = 'panel.svg'
+  HIT = 'hit.svg'
+  MISS = 'miss.svg'
   SHIPS = ['carrier.svg', 'battleship.svg', 'destroyer.svg',
            'submarine.svg', 'patrol boat.svg']
   def initialize(player, visible, parent = nil)
@@ -16,6 +19,8 @@ class BoardView < Qt::Widget
     @player = player
     @visible = visible
     @panel = Qt::SvgRenderer.new PANEL
+    @hit = Qt::SvgRenderer.new HIT
+    @miss = Qt::SvgRenderer.new MISS
     @ship = SHIPS.collect { |filename| Qt::SvgRenderer.new filename }
     @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
   end
@@ -26,7 +31,7 @@ class BoardView < Qt::Widget
   def mousePressEvent(e)
     w, h = width / Player::N, height / Player::N
     bx, by = e.x / w, e.y / h
-    if @player.placing?
+    if @visible and @player.placing?
       ship = @player.ship_at(bx, by)
       if ship
         if e.button == Qt::LeftButton
@@ -42,6 +47,12 @@ class BoardView < Qt::Widget
           end
           update
         end
+      end
+    else
+      if not @visible and @player.board(bx, by) == :unknown
+        @player.target bx, by
+        update
+        emit computer_move
       end
     end
   end
@@ -93,9 +104,20 @@ class BoardView < Qt::Widget
         end
       end
     end
+    for j in 0 ... Player::N
+      for i in 0 ... Player::N
+        state = @player.board i, j
+        if state == :hit
+          @hit.render painter, Qt::RectF.new(i * w, j * h, w, h)
+        elsif state == :miss
+          @miss.render painter, Qt::RectF.new(i * w, j * h, w, h)
+        end
+      end
+    end
   end
 end
 class Content < Qt::Widget
+  slots 'computer_move()'
   attr_reader :game
   attr_reader :human_board
   attr_reader :computer_board
@@ -110,11 +132,16 @@ class Content < Qt::Widget
     layout_computer = Qt::HBoxLayout.new @ui.computerFrame
     @computer_board = BoardView.new @game.computer, false
     layout_computer.addWidget @computer_board
+    connect @computer_board, SIGNAL('computer_move()'), self, SLOT('computer_move()')
   end
   def game=(value)
     @game = value
     @human_board.board = @game.human
     @computer_board.board = @game.computer
+  end
+  def computer_move
+    @game.computer_move
+    @human_board.update
   end
 end
 class GameWindow < Qt::MainWindow

@@ -2,18 +2,32 @@ class Player
   N = 10
   LENGTH = [5, 4, 3, 3, 2]
   TITLE = ['Carrier', 'Battleship', 'Destroyer', 'Submarine', 'Patrol boat']
-  def initialize
+  def initialize(game)
+    @game = game
     @ship = [[0, 0, false], [0, 1, false], [0, 2, false], [0, 3, false], [0, 4, false]]
+    @board = (0 ... N).collect { (0 ... N).collect { false } }
     @placing = false
   end
-  def placing=(value)
-    @placing = value
-  end
   def placing?
-    @placing
+    @game.placing?
   end
   def ship(i)
     @ship[i]
+  end
+  def target(x, y)
+    @game.placing = false
+    @board[y][x] = true
+  end
+  def board(x, y)
+    if @board[y][x]
+      if ship_at(x, y)
+        :hit
+      else
+        :miss
+      end
+    else
+      :unknown
+    end
   end
   def place(i, x, y, vertical)
     previous = @ship[i]
@@ -57,15 +71,25 @@ class Game
   attr_reader :human
   attr_reader :computer
   def initialize
-    @human = Player.new
-    @computer = Player.new
-    @human.placing = true
+    @human = Player.new self
+    @computer = Player.new self
+    @placing = true
   end
   def placing=(value)
-    @human.placing = value
+    @placing = value
   end
   def placing?
-    @human.placing?
+    @placing
+  end
+  def computer_move
+    move = false
+    while not move
+      x, y = rand(Player::N), rand(Player::N)
+      if @human.board(x, y) == :unknown
+        @human.target x, y
+        move = true
+      end
+    end
   end
 end
 

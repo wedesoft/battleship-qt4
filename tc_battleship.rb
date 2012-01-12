@@ -2,7 +2,7 @@ require 'test/unit'
 require 'game'
 class TC_Battleship < Test::Unit::TestCase
   def create_player
-    player = Player.new
+    player = Player.new Game.new
     player.place 0, 0, 0, false
     player.place 1, 0, 1, false
     player.place 2, 0, 2, false
@@ -33,5 +33,13 @@ class TC_Battleship < Test::Unit::TestCase
     assert game.placing?
     game.placing = false
     assert !game.placing?
+  end
+  def test_target
+    player = create_player
+    assert_equal :unknown, player.board(0, 0)
+    player.target 7, 7
+    assert_equal :miss, player.board(7, 7)
+    player.target 0, 0
+    assert_equal :hit, player.board(0, 0)
   end
 end
