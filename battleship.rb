@@ -19,29 +19,37 @@ class BoardView < Qt::Widget
     @ship = SHIPS.collect { |filename| Qt::SvgRenderer.new filename }
     @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
   end
+  def board=(value)
+    @player = value
+    update
+  end
   def mousePressEvent(e)
     w, h = width / Player::N, height / Player::N
     bx, by = e.x / w, e.y / h
-    ship = @player.ship_at(bx, by)
-    if ship
-      if e.button == Qt::LeftButton
-        @moving = ship
-        @x0, @y0 = e.x, e.y
-      else
-        x, y, vertical = *@player.ship(ship)
-        dx, dy = bx - x, by - y
-        if @player.place ship, x + dx - dy, y + dy - dx, !vertical
-          emit message("#{Player::TITLE[ship]} rotated")
+    if @player.placing?
+      ship = @player.ship_at(bx, by)
+      if ship
+        if e.button == Qt::LeftButton
+          @moving = ship
+          @x0, @y0 = e.x, e.y
         else
-          emit message('Invalid placement')
+          x, y, vertical = *@player.ship(ship)
+          dx, dy = bx - x, by - y
+          if @player.place ship, x + dx - dy, y + dy - dx, !vertical
+            emit message("#{Player::TITLE[ship]} rotated")
+          else
+            emit message('Invalid placement')
+          end
+          update
         end
-        update
       end
     end
   end
   def mouseMoveEvent(e)
-    @dx, @dy = e.x - @x0, e.y - @y0
-    update
+    if @moving
+      @dx, @dy = e.x - @x0, e.y - @y0
+      update
+    end
   end
   def mouseReleaseEvent(e)
     if @moving
@@ -88,6 +96,7 @@ class BoardView < Qt::Widget
   end
 end
 class Content < Qt::Widget
+  attr_reader :game
   attr_reader :human_board
   attr_reader :computer_board
   def initialize(game, parent = nil)
@@ -102,9 +111,16 @@ class Content < Qt::Widget
     @computer_board = BoardView.new @game.computer, false
     layout_computer.addWidget @computer_board
   end
+  def game=(value)
+    @game = value
+    @human_board.board = @game.human
+    @computer_board.board = @game.computer
+  end
 end
 class GameWindow < Qt::MainWindow
   DELAY = 3000
+  slots 'restart()'
+  slots 'placement_done()'
   slots 'status(QString)'
   def initialize
     super
@@ -113,8 +129,19 @@ class GameWindow < Qt::MainWindow
     @ui.setupUi self
     @content = Content.new @game, self
     setCentralWidget @content
+    connect @ui.actionNewGame, SIGNAL('activated()'), self, SLOT('restart()')
+    connect @ui.actionFinishPlacement, SIGNAL('activated()'), self, SLOT('placement_done()')
     connect @ui.actionQuit, SIGNAL('activated()'), self, SLOT('close()')
     connect @content.human_board, SIGNAL('message(QString)'), self, SLOT('status(QString)')
+  end
+  def restart
+    @game = Game.new
+    @content.game = @game
+    @ui.actionFinishPlacement.enabled = true
+  end
+  def placement_done
+    @content.game.placing = false
+    @ui.actionFinishPlacement.enabled = false
   end
   def status(text)
     statusBar.showMessage text, DELAY

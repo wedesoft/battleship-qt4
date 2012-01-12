@@ -28,4 +28,10 @@ class TC_Battleship < Test::Unit::TestCase
     assert player.place(0, 9, 5, true)
     assert !player.place(0, 9, 6, true)
   end
+  def test_placing_off
+    game = Game.new
+    assert game.placing?
+    game.placing = false
+    assert !game.placing?
+  end
 end

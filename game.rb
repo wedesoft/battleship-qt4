@@ -4,6 +4,13 @@ class Player
   TITLE = ['Carrier', 'Battleship', 'Destroyer', 'Submarine', 'Patrol boat']
   def initialize
     @ship = [[0, 0, false], [0, 1, false], [0, 2, false], [0, 3, false], [0, 4, false]]
+    @placing = false
+  end
+  def placing=(value)
+    @placing = value
+  end
+  def placing?
+    @placing
   end
   def ship(i)
     @ship[i]
@@ -52,10 +59,13 @@ class Game
   def initialize
     @human = Player.new
     @computer = Player.new
-    @placing = true
+    @human.placing = true
+  end
+  def placing=(value)
+    @human.placing = value
   end
   def placing?
-    @placing
+    @human.placing?
   end
 end
 
