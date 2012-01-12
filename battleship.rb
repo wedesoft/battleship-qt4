@@ -52,9 +52,17 @@ class BoardView < Qt::Widget
   def mousePressEvent(e)
     w, h = width / Player::N, height / Player::N
     bx, by = e.x / w, e.y / h
-    @placing = @player.ship_at(bx, by)
-    if @placing
-      @x0, @y0 = e.x, e.y
+    ship = @player.ship_at(bx, by)
+    if ship
+      if e.button == Qt::LeftButton
+        @placing = ship
+        @x0, @y0 = e.x, e.y
+      else
+        x, y, vertical = *@player.ship(ship)
+        dx, dy = bx - x, by - y
+        @player.place ship, x + dx - dy, y + dy - dx, !vertical
+        update
+      end
     end
   end
   def mouseMoveEvent(e)
