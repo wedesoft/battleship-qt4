@@ -7,7 +7,7 @@ using namespace std;
 
 Game::Game(void)
 {
-  srandom(time(NULL));
+  srand(time(NULL));
   m_human = new Player(this);
   m_computer = new Player(this);
   m_placing = true;
@@ -31,10 +31,10 @@ void Game::computerMove(void)
           prefer.push_back(pair< int, int >(x, y));
       };
   if (prefer.empty()) {
-    int idx = random() % unknown.size();
+    int idx = rand() % unknown.size();
     m_human->target(unknown[idx].first, unknown[idx].second);
   } else {
-    int idx = random() % prefer.size();
+    int idx = rand() % prefer.size();
     m_human->target(prefer[idx].first, prefer[idx].second);
   };
 }
