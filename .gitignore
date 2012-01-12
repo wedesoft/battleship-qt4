@@ -1,6 +1,9 @@
 dsci-exercise.txt
+battleship
 *.un~
 *.swp
+*.o
 ui_*.rb
+ui_*.hh
 qrc_*.rb
 
