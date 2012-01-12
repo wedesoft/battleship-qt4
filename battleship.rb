@@ -3,41 +3,11 @@
 # resource file?
 # operating system dependent style
 require 'Qt4'
+require 'game'
 require 'ui_gamewindow'
 require 'ui_content'
-class Player
-  N = 10
-  LENGTH = [2, 3, 3, 4, 5]
-  def initialize
-    @ship = [[0, 0, false], [0, 1, false], [0, 2, false], [0, 3, false], [0, 4, false]]
-    @board = [[0] * N] * N
-  end
-  def ship(i)
-    @ship[i]
-  end
-  def place(i, x, y, vertical)
-    @ship[i] = [x, y, vertical]
-  end
-  def ship_at(bx, by)
-    @ship.zip(LENGTH).index do |ship, length|
-      x, y, vertical = *ship
-      unless vertical
-        bx >= x and bx < x + length and by == y
-      else
-        bx == x and by >= y and by < y + length
-      end
-    end
-  end
-end
-class Game
-  attr_reader :human
-  attr_reader :computer
-  def initialize
-    @human = Player.new
-    @computer = Player.new
-  end
-end
 class BoardView < Qt::Widget
+  signals 'message(QString)'
   PANEL = 'panel.svg'
   SHIPS = ['carrier.svg', 'battleship.svg', 'destroyer.svg',
            'submarine.svg', 'patrol boat.svg']
@@ -47,38 +17,42 @@ class BoardView < Qt::Widget
     @visible = visible
     @panel = Qt::SvgRenderer.new PANEL
     @ship = SHIPS.collect { |filename| Qt::SvgRenderer.new filename }
-    @placing, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
+    @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
   end
   def mousePressEvent(e)
+  p @player.valid?
     w, h = width / Player::N, height / Player::N
     bx, by = e.x / w, e.y / h
     ship = @player.ship_at(bx, by)
     if ship
       if e.button == Qt::LeftButton
-        @placing = ship
+        @moving = ship
         @x0, @y0 = e.x, e.y
       else
         x, y, vertical = *@player.ship(ship)
         dx, dy = bx - x, by - y
+        emit message("#{Player::TITLE[ship]} rotated")
         @player.place ship, x + dx - dy, y + dy - dx, !vertical
         update
       end
     end
   end
   def mouseMoveEvent(e)
-    if @placing
-      @dx, @dy = e.x - @x0, e.y - @y0
-      update
-    end
+    @dx, @dy = e.x - @x0, e.y - @y0
+    update
   end
   def mouseReleaseEvent(e)
-    if @placing
+    if @moving
       w, h = width / Player::N, height / Player::N
-      x, y, vertical = *@player.ship(@placing)
+      x, y, vertical = *@player.ship(@moving)
       x += (@dx + w / 2) / w
       y += (@dy + h / 2) / h
-      @player.place @placing, x, y, vertical
-      @placing, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
+      if @player.place @moving, x, y, vertical
+        emit message("#{Player::TITLE[@moving]} placed")
+      else
+        emit message('Invalid placement')
+      end
+      @moving, @x0, @y0, @dx, @dy = nil, 0, 0, 0, 0
       update
     end
   end
@@ -93,7 +67,7 @@ class BoardView < Qt::Widget
     if @visible
       @ship.each_with_index do |ship,i|
         x, y, vertical = *@player.ship(i)
-        unless i == @placing
+        unless i == @moving
           dx, dy = 0, 0
         else
           dx, dy = @dx, @dy
@@ -112,6 +86,8 @@ class BoardView < Qt::Widget
   end
 end
 class Content < Qt::Widget
+  attr_reader :human_board
+  attr_reader :computer_board
   def initialize(game, parent = nil)
     super parent
     @game = game
@@ -126,6 +102,8 @@ class Content < Qt::Widget
   end
 end
 class GameWindow < Qt::MainWindow
+  DELAY = 3000
+  slots 'status(QString)'
   def initialize
     super
     @game = Game.new
@@ -133,6 +111,11 @@ class GameWindow < Qt::MainWindow
     @ui.setupUi self
     @content = Content.new @game, self
     setCentralWidget @content
+    connect @ui.actionQuit, SIGNAL('activated()'), self, SLOT('close()')
+    connect @content.human_board, SIGNAL('message(QString)'), self, SLOT('status(QString)')
+  end
+  def status(text)
+    statusBar.showMessage text, DELAY
   end
 end
 app = Qt::Application.new ARGV
