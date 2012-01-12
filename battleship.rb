@@ -49,7 +49,7 @@ class BoardView < Qt::Widget
         end
       end
     else
-      if not @visible and @player.board(bx, by) == :unknown
+      if not @visible and @player.board(bx, by) == :unknown and not @player.game_over?
         @player.target bx, by
         update
         emit computer_move
@@ -118,6 +118,7 @@ class BoardView < Qt::Widget
 end
 class Content < Qt::Widget
   slots 'computer_move()'
+  signals 'message(QString)'
   attr_reader :game
   attr_reader :human_board
   attr_reader :computer_board
@@ -140,8 +141,15 @@ class Content < Qt::Widget
     @computer_board.board = @game.computer
   end
   def computer_move
-    @game.computer_move
-    @human_board.update
+    if @game.computer.defeated?
+      emit message('HUMAN WINS!!!')
+    else
+      @game.computer_move
+      @human_board.update
+      if @game.human.defeated?
+        emit message('COMPUTER WINS!!!')
+      end
+    end
   end
 end
 class GameWindow < Qt::MainWindow
@@ -157,6 +165,7 @@ class GameWindow < Qt::MainWindow
     setCentralWidget @content
     connect @ui.actionNewGame, SIGNAL('activated()'), self, SLOT('restart()')
     connect @ui.actionQuit, SIGNAL('activated()'), self, SLOT('close()')
+    connect @content, SIGNAL('message(QString)'), self, SLOT('status(QString)')
     connect @content.human_board, SIGNAL('message(QString)'), self, SLOT('status(QString)')
   end
   def restart

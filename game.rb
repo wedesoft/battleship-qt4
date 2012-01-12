@@ -11,12 +11,27 @@ class Player
   def placing?
     @game.placing?
   end
+  def game_over?
+    @game.over?
+  end
   def ship(i)
     @ship[i]
   end
   def target(x, y)
     @game.placing = false
     @board[y][x] = true
+  end
+  def hits
+    retval = 0
+    for y in 0 ... N
+      for x in 0 ... N
+        retval += 1 if board(x, y) == :hit
+      end
+    end
+    retval
+  end
+  def defeated?
+    hits == LENGTH.inject { |a, b| a + b }
   end
   def board(x, y)
     if @board[y][x]
@@ -90,6 +105,9 @@ class Game
         move = true
       end
     end
+  end
+  def over?
+    @human.defeated? or @computer.defeated?
   end
 end
 
