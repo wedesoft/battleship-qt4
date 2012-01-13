@@ -1,14 +1,16 @@
 SUFFIXES = .rb .ui .cc .hh
 
-CXXOPTS = -I/usr/include/qt4
-LDADD = -lQtGui -lQtSvg -lQtCore
+QTDIR = /Users/janwedekind/QtSDK/Desktop/Qt/474/gcc
+
+CXXOPTS = -I$(QTDIR)/include
+LDADD = -L$(QTDIR)/lib -F$(QTDIR)/lib -framework QtGui -framework QtSvg -framework QtCore
 
 RUBY = ruby
 RBUIC = rbuic4
 RBRCC = rbrcc
-UIC = uic-qt4
-MOC = moc-qt4
-RCC = rcc
+UIC = $(QTDIR)/bin/uic
+MOC = $(QTDIR)/bin/moc
+RCC = $(QTDIR)/bin/rcc
 TAR = tar
 MKDIR = mkdir
 CP = cp
