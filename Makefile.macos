@@ -14,6 +14,7 @@ RCC = $(QTDIR)/bin/rcc
 TAR = tar
 MKDIR = mkdir
 CP = cp
+INSTALL_NAME_TOOL = install_name_tool
 
 RUBYUI = ui_gamewindow.rb ui_content.rb qrc_battleship.rb
 CCUI = ui_gamewindow.hh ui_content.hh
@@ -45,6 +46,9 @@ battleship.tar.bz2: $(SOURCES)
 
 battleship: $(CCUI) $(OBJECTS) $(MOC_OBJECTS) $(RCCOBJ)
 	$(CXX) -o $@ $(OBJECTS) $(MOC_OBJECTS) $(RCCOBJ) $(LDADD)
+	$(INSTALL_NAME_TOOL) -change $(QTDIR)/lib/QtGui.framework/Versions/4/QtGui @executable_path/QtGui.framework/QtGui $@
+	$(INSTALL_NAME_TOOL) -change $(QTDIR)/lib/QtSvg.framework/Versions/4/QtSvg @executable_path/QtSvg.framework/QtSvg $@
+	$(INSTALL_NAME_TOOL) -change $(QTDIR)/lib/QtCore.framework/Versions/4/QtCore @executable_path/QtCore.framework/QtCore $@
 
 ruby: $(RUBYUI)
 
