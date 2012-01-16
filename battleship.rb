@@ -5,7 +5,7 @@
 require 'Qt4'
 require 'gamewindow'
 app = Qt::Application.new ARGV
-# app.setStyle 'windows'
+# app.setStyle 'windowsvista'
 # app.setStyle 'macintosh'
 app.setStyle 'plastique'
 window = GameWindow.new
