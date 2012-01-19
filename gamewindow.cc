@@ -4,12 +4,17 @@ GameWindow::GameWindow(void)
 {
   m_game = new Game;
   ui.setupUi(this);
-  m_content = new Content(m_game);
-  setCentralWidget(m_content);
+  QHBoxLayout *layoutHuman = new QHBoxLayout(ui.humanFrame);
+  m_humanBoard = new BoardView(m_game->human(), true);
+  layoutHuman->addWidget(m_humanBoard);
+  QHBoxLayout *layoutComputer = new QHBoxLayout(ui.computerFrame);
+  m_computerBoard = new BoardView(m_game->computer(), false);
+  layoutComputer->addWidget(m_computerBoard);
   connect(ui.actionNewGame, SIGNAL(activated()), this, SLOT(restart()));
   connect(ui.actionQuit, SIGNAL(activated()), this, SLOT(close()));
-  connect(m_content, SIGNAL(message(QString)), this, SLOT(status(QString)));
-  connect(m_content->humanBoard(), SIGNAL(message(QString)), this, SLOT(status(QString)));
+  connect(ui.startButton, SIGNAL(clicked()), this, SLOT(startGame()));
+  connect(m_humanBoard, SIGNAL(message(QString)), this, SLOT(status(QString)));
+  connect(m_computerBoard, SIGNAL(computerMove()), this, SLOT(computerMove()));
 }
 
 GameWindow::~GameWindow(void)
@@ -21,7 +26,28 @@ void GameWindow::restart(void)
 {
   delete m_game;
   m_game = new Game;
-  m_content->setGame(m_game);
+  m_humanBoard->setBoard(m_game->human());
+  m_computerBoard->setBoard(m_game->computer());
+  ui.startButton->setEnabled(true);
+}
+
+void GameWindow::startGame(void)
+{
+  m_game->setPlacing(false);
+  ui.startButton->setEnabled(false);
+};
+
+void GameWindow::computerMove(void)
+{
+  if (m_game->computer()->defeated()) {
+    status("HUMAN WINS!!!");
+  } else {
+    m_game->computerMove();
+    m_humanBoard->update();
+    if (m_game->human()->defeated()) {
+      status("COMPUTER WINS!!!");
+    };
+  };
 }
 
 void GameWindow::status(QString text)

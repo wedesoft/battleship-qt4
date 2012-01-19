@@ -103,7 +103,7 @@ void BoardView::mousePressEvent(QMouseEvent *e)
       };
     };
   } else {
-    if (!m_visible && m_player->board(bx, by) == UNKNOWN && !m_player->gameOver()) {
+    if (!m_visible && m_player->board(bx, by) == UNKNOWN && m_player->playing()) {
       m_player->target(bx, by);
       update();
       emit computerMove();

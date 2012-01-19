@@ -27,7 +27,7 @@ public:
   int hits(void);
   bool defeated(void);
   bool placing(void);
-  bool gameOver(void);
+  bool playing(void);
   Ship ship(int i) { return m_ship[i]; }
   void target(int x, int y);
   int board(int x, int y);

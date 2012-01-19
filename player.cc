@@ -31,10 +31,10 @@ bool Player::placing(void)
   return m_game->placing();
 }
 
-bool Player::gameOver(void)
+bool Player::playing(void)
 {
-  return m_game->over();
-}
+  return !placing() && !m_game->over();
+};
 
 void Player::target(int x, int y)
 {

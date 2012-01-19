@@ -42,7 +42,7 @@ class BoardView < Qt::Widget
         end
       end
     else
-      if not @visible and @player.board(bx, by) == :unknown and not @player.game_over?
+      if not @visible and @player.board(bx, by) == :unknown and @player.playing?
         @player.target bx, by
         update
         emit computer_move

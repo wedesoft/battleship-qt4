@@ -3,8 +3,8 @@
 
 #include <QtGui/QMainWindow>
 #include "ui_gamewindow.hh"
+#include "boardview.hh"
 #include "game.hh"
-#include "content.hh"
 
 #define DELAY 3000
 
@@ -16,11 +16,14 @@ public:
     virtual ~GameWindow(void);
 public slots:
     void restart();
+    void startGame();
+    void computerMove();
     void status(QString);
 protected:
     Ui::GameWindow ui;
     Game *m_game;
-    Content *m_content;
+    BoardView *m_humanBoard;
+    BoardView *m_computerBoard;
 };
 
 #endif

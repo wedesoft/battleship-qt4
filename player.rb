@@ -21,14 +21,14 @@ class Player
   def placing?
     @game.placing?
   end
-  def game_over?
-    @game.over?
+  def playing?
+    not placing? and not @game.over?
   end
   def ship(i)
     @ship[i]
   end
   def target(x, y)
-    @game.placing = false
+    # @game.placing = false
     @board[y][x] = true
   end
   def hits

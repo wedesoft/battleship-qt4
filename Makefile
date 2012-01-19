@@ -13,21 +13,21 @@ TAR = tar
 MKDIR = mkdir
 CP = cp
 
-RUBYUI = ui_gamewindow.rb ui_content.rb qrc_battleship.rb
-CCUI = ui_gamewindow.hh ui_content.hh
-OBJECTS = battleship.o gamewindow.o game.o boardview.o content.o player.o
-MOC_OBJECTS = moc_gamewindow.o moc_boardview.o moc_content.o
+RUBYUI = ui_gamewindow.rb qrc_battleship.rb
+CCUI = ui_gamewindow.hh
+OBJECTS = battleship.o gamewindow.o game.o boardview.o player.o
+MOC_OBJECTS = moc_gamewindow.o moc_boardview.o
 RCCOBJ = qrc_battleship.o
 
-SOURCES = battleship.cc boardview.cc content.cc game.cc gamewindow.cc player.cc \
-	boardview.hh content.hh game.hh gamewindow.hh player.hh \
-	battleship.rb boardview.rb content.rb game.rb gamewindow.rb player.rb tc_battleship.rb \
-	content.ui gamewindow.ui battleship.qrc \
+SOURCES = battleship.cc boardview.cc game.cc gamewindow.cc player.cc \
+	boardview.hh game.hh gamewindow.hh player.hh \
+	battleship.rb boardview.rb game.rb gamewindow.rb player.rb tc_battleship.rb \
+	gamewindow.ui battleship.qrc \
 	battleship.svg carrier.svg destroyer.svg hit.svg miss.svg panel.svg patrol\ boat.svg \
 	submarine.svg \
 	Makefile Makefile.mingw Makefile.macos
 
-default: cpp
+default: all
 
 all: cpp ruby
 
