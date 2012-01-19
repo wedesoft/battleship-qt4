@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="images">
+    <file>play.png</file>
+    <file>filenew.png</file>
+    <file>exit.png</file>
     <file>carrier.svg</file>
     <file>destroyer.svg</file>
     <file>hit.svg</file>
