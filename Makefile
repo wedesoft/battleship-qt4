@@ -1,4 +1,4 @@
-SUFFIXES = .rb .ui .cc .hh
+SUFFIXES = .rb .ui .cc .hh .py
 
 CXXOPTS = -I/usr/include/qt4
 LDADD = -lQtGui -lQtSvg -lQtCore
@@ -6,6 +6,9 @@ LDADD = -lQtGui -lQtSvg -lQtCore
 RUBY = ruby
 RBUIC = rbuic4
 RBRCC = rbrcc
+PYTHON = python
+PYUIC = pyuic4
+PYRCC = pyrcc4
 UIC = uic-qt4
 MOC = moc-qt4
 RCC = rcc
@@ -14,6 +17,7 @@ MKDIR = mkdir
 CP = cp
 
 RUBYUI = ui_gamewindow.rb qrc_battleship.rb
+PYTHONUI = ui_gamewindow.py qrc_battleship.py
 CCUI = ui_gamewindow.hh
 OBJECTS = battleship.o gamewindow.o game.o boardview.o player.o
 MOC_OBJECTS = moc_gamewindow.o moc_boardview.o
@@ -22,6 +26,7 @@ RCCOBJ = qrc_battleship.o
 SOURCES = battleship.cc boardview.cc game.cc gamewindow.cc player.cc \
 	boardview.hh game.hh gamewindow.hh player.hh \
 	battleship.rb boardview.rb game.rb gamewindow.rb player.rb tc_battleship.rb \
+	battleship.py gamewindwo.py \
 	gamewindow.ui battleship.qrc \
 	battleship.svg carrier.svg destroyer.svg hit.svg miss.svg panel.svg patrol\ boat.svg \
 	submarine.svg \
@@ -29,7 +34,7 @@ SOURCES = battleship.cc boardview.cc game.cc gamewindow.cc player.cc \
 
 default: all
 
-all: cpp ruby
+all: cpp python ruby
 
 cpp: battleship
 
@@ -45,6 +50,8 @@ battleship: $(CCUI) $(OBJECTS) $(MOC_OBJECTS) $(RCCOBJ)
 	$(CXX) -o $@ $(OBJECTS) $(MOC_OBJECTS) $(RCCOBJ) $(LDADD)
 
 ruby: $(RUBYUI)
+
+python: $(PYTHONUI)
 
 test:
 	$(RUBY) tc_battleship.rb
@@ -65,6 +72,9 @@ DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 ui_%.rb: %.ui
 	$(RBUIC) $< > $@
 
+ui_%.py: %.ui
+	$(PYUIC) $< > $@
+
 ui_%.hh: %.ui
 	$(UIC) $< > $@
 
@@ -73,6 +83,9 @@ moc_%.cc: %.hh
 
 qrc_%.rb: %.qrc
 	$(RBRCC) $< > $@
+
+qrc_%.py: %.qrc
+	$(PYRCC) $< > $@
 
 qrc_%.cc: %.qrc
 	$(RCC) $< > $@

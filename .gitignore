@@ -5,9 +5,12 @@ battleship.tar.bz2
 *.un~
 *.swp
 *.o
+*.pyc
 ui_*.rb
+ui_*.py
 ui_*.hh
 qrc_*.rb
+qrc_*.py
 moc_*.cc
 qrc_*.cc
 
