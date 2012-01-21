@@ -18,8 +18,8 @@ class GameWindow < Qt::MainWindow
     layout_computer = Qt::HBoxLayout.new @ui.computerFrame
     @computer_board = BoardView.new @game.computer, false
     layout_computer.addWidget @computer_board
-    connect @ui.actionNewGame, SIGNAL('activated()'), self, SLOT('restart()')
-    connect @ui.actionQuit, SIGNAL('activated()'), self, SLOT('close()')
+    connect @ui.actionNewGame, SIGNAL('triggered()'), self, SLOT('restart()')
+    connect @ui.actionQuit, SIGNAL('triggered()'), self, SLOT('close()')
     connect @ui.startButton, SIGNAL('clicked()'), self, SLOT('start_game()')
     connect @human_board, SIGNAL('message(QString)'), self, SLOT('status(QString)')
     connect @computer_board, SIGNAL('computer_move()'), self, SLOT('computer_move()')

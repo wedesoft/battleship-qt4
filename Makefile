@@ -17,7 +17,7 @@ MKDIR = mkdir
 CP = cp
 
 RUBYUI = ui_gamewindow.rb qrc_battleship.rb
-PYTHONUI = ui_gamewindow.py qrc_battleship.py
+PYTHONUI = ui_gamewindow.py battleship_rc.py
 CCUI = ui_gamewindow.hh
 OBJECTS = battleship.o gamewindow.o game.o boardview.o player.o
 MOC_OBJECTS = moc_gamewindow.o moc_boardview.o
@@ -57,7 +57,7 @@ test:
 	$(RUBY) tc_battleship.rb
 
 clean:
-	rm -Rf ui_*.rb qrc_*.rb ui_*.hh qrc_*.cc moc_*.cc *.o *~ .deps battleship
+	rm -Rf ui_*.rb ui_*.py qrc_*.rb *_rc.py ui_*.hh qrc_*.cc moc_*.cc *.o *.pyc *~ .deps battleship
 
 DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
 
@@ -84,7 +84,7 @@ moc_%.cc: %.hh
 qrc_%.rb: %.qrc
 	$(RBRCC) $< > $@
 
-qrc_%.py: %.qrc
+%_rc.py: %.qrc
 	$(PYRCC) $< > $@
 
 qrc_%.cc: %.qrc

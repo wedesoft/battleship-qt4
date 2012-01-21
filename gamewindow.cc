@@ -10,8 +10,8 @@ GameWindow::GameWindow(void)
   QHBoxLayout *layoutComputer = new QHBoxLayout(ui.computerFrame);
   m_computerBoard = new BoardView(m_game->computer(), false);
   layoutComputer->addWidget(m_computerBoard);
-  connect(ui.actionNewGame, SIGNAL(activated()), this, SLOT(restart()));
-  connect(ui.actionQuit, SIGNAL(activated()), this, SLOT(close()));
+  connect(ui.actionNewGame, SIGNAL(triggered()), this, SLOT(restart()));
+  connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(close()));
   connect(ui.startButton, SIGNAL(clicked()), this, SLOT(startGame()));
   connect(m_humanBoard, SIGNAL(message(QString)), this, SLOT(status(QString)));
   connect(m_computerBoard, SIGNAL(computerMove()), this, SLOT(computerMove()));

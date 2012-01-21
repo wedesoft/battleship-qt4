@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import sys
-from PyQt4 import QtGui
+from PyQt4.QtGui import QApplication
 from gamewindow import GameWindow
-app = QtGui.QApplication(sys.argv)
+app = QApplication(sys.argv)
 w = GameWindow()
 w.show()
 sys.exit(app.exec_())
