@@ -22,14 +22,20 @@ class GameWindow(QMainWindow):
     self.computerBoard.computerMove.connect(self.computerMove)
   def restart(self):
     self.game = Game()
-    self.humanBoard.setGame(self.game)
-    self.computerBoard.setGame(self.game)
+    self.humanBoard.setBoard(self.game.getHuman())
+    self.computerBoard.setBoard(self.game.getComputer())
     self.ui.startButton.setEnabled(True)
   def startGame(self):
     self.game.setPlacing(False)
     self.ui.startButton.setEnabled(False)
   def computerMove(self):
-    pass
+    if self.game.computerDefeated():
+      self.status("HUMAN WINS!!!")
+    else:
+      self.game.computerMove()
+      self.humanBoard.update()
+      if self.game.humanDefeated():
+        self.status("COMPUTER WINS!!!")
   def status(self, text):
     self.statusBar().showMessage(text, self.DELAY)
 

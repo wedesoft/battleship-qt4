@@ -15,7 +15,7 @@ class BoardView(QWidget):
     self.panel = QSvgRenderer(self.PANEL, self)
     self.hit = QSvgRenderer(self.HIT, self)
     self.miss = QSvgRenderer(self.MISS, self)
-  def setBoard(value):
+  def setBoard(self, value):
     self.player = value
     self.update()
   def paintEvent(self, e):
