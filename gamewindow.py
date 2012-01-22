@@ -3,7 +3,7 @@ from ui_gamewindow import Ui_GameWindow
 from game import Game
 from boardview import BoardView
 class GameWindow(QMainWindow):
-  delay = 3000
+  DELAY = 3000
   def __init__(self):
     QMainWindow.__init__(self)
     self.game = Game()
@@ -31,5 +31,5 @@ class GameWindow(QMainWindow):
   def computerMove(self):
     pass
   def status(self, text):
-    self.statusBar().showMessage(text, self.delay)
+    self.statusBar().showMessage(text, self.DELAY)
 
