@@ -28,7 +28,6 @@ class Player
     @ship[i]
   end
   def target(x, y)
-    # @game.placing = false
     @board[y][x] = true
   end
   def hits

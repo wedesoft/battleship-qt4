@@ -13,7 +13,7 @@ class GameWindow(QMainWindow):
     self.humanBoard = BoardView(self.game.human, True)
     layoutHuman.addWidget(self.humanBoard)
     layoutComputer = QHBoxLayout(self.ui.computerFrame)
-    self.computerBoard = BoardView(self.game.computer, True)
+    self.computerBoard = BoardView(self.game.computer, False)
     layoutComputer.addWidget(self.computerBoard)
     self.ui.actionNewGame.triggered.connect(self.restart)
     self.ui.actionQuit.triggered.connect(self.close)
