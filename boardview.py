@@ -11,7 +11,7 @@ class BoardView(QWidget):
   SHIPS = [':/images/carrier.svg', ':/images/battleship.svg', ':/images/destroyer.svg',
            ':/images/submarine.svg', ':/images/patrol boat.svg']
   def __init__(self, player, visible, parent = None):
-    QWidget.__init__(self, parent)
+    super(BoardView, self).__init__(parent)
     self.player = player
     self.visible = visible
     self.panel = QSvgRenderer(self.PANEL, self)

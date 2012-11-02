@@ -5,7 +5,7 @@ from boardview import BoardView
 class GameWindow(QMainWindow):
   DELAY = 3000
   def __init__(self):
-    QMainWindow.__init__(self)
+    super(GameWindow, self).__init__()
     self.game = Game()
     self.ui = Ui_GameWindow()
     self.ui.setupUi(self)
